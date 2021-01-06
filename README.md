@@ -9,6 +9,6 @@
 If it's not already in place, define the following `.env` file:
 
 ```
-REACT_APP_BACKEND=http://localhost:3000
+REACT_APP_BACKEND=https://localhost:3000
 PORT=4000
 ```
