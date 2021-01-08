@@ -5,8 +5,8 @@ import store from '../core/store';
 
 import { BACKEND_API } from './constants';
 
-const instance = axios.create({ baseURL: BACKEND_API });
-
+//const instance = axios.create({ baseURL: BACKEND_API });
+const instance = axios.create({baseURL: window.location.origin + ':3000'});
 // middlewares
 instance.interceptors.response.use(
   response => {
