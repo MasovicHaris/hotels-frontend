@@ -1,19 +1,18 @@
-import React, {useEffect, Button, Fragment} from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useSelector, useDispatch } from 'react-redux';
-import { Redirect, useHistory } from 'react-router-dom';
-import { Divider, Avatar, colors} from "@material-ui/core";
+import { useHistory } from 'react-router-dom';
+import { Divider, Avatar} from "@material-ui/core";
 
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { handleGetHotels, handleGetReviews, handleGetHotel } from '../actions/home-actions';
-import color from '@material-ui/core/colors/amber';
+import { handleDeleteHotel } from '../../admin-page/actions/admin-page-actions';
 import Rating from '@material-ui/lab/Rating';
 import Link from '@material-ui/core/Link';
 
@@ -21,13 +20,11 @@ import Link from '@material-ui/core/Link';
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
-import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import ApplicationHeader from '../../shared-components/header';
+import Button from '@material-ui/core/Button';
 
 import TextField from '@material-ui/core/TextField';
-
-import Review from './reviews'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
     margin: 'auto',
     width: 800,
+    marginTop: '50px'
   },
   paper2: {
     padding: theme.spacing(2),
@@ -57,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     maxHeight: '100%',
   },
+  edit: {
+    marginRight: '10px'
+  }
 }));
 
 export default function ComplexGrid() {
@@ -66,6 +67,8 @@ export default function ComplexGrid() {
 
   const reviews = useSelector(state => state.hotels.reviews);
   const history = useHistory();
+
+  const userIsAdmin = useSelector(state => state.auth.user.type === 'Admin');
 
   const imgLink = '../../../../user-logo.png'
   const dispatch = useDispatch();
@@ -79,9 +82,6 @@ export default function ComplexGrid() {
   }, history));
   }, [dispatch]);
 
-  console.log(hotels, reviews)
-
-
   const [expandedId, setExpandedId] = React.useState(-1);
 
 
@@ -94,18 +94,31 @@ export default function ComplexGrid() {
     dispatch(handleGetHotel(id));
     history.push('/review');
   }
+
+  const handleEditHotel = (id) => {
+    dispatch(handleGetHotel(id));
+    history.push('/new-hotel');
+  }
  
   return (
     
     <div className={classes.root}>
+      <ApplicationHeader/>
     {hotels.data.map((data) => {
       return <Paper className={classes.paper}>
+        { userIsAdmin && <div>
+          <Button variant="outlined" color="primary" className={classes.edit} onClick={() => handleEditHotel(data._id)}>
+            Edit
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={() => {dispatch(handleDeleteHotel(data._id)); window.location.reload();}}>
+            Delete
+          </Button>
+        </div> }
         <Grid container spacing={2}  >
           <Grid item>
             <ButtonBase className={classes.image}>
               <img className={classes.img} alt="complex" src='../../../../hotel-logo.jpg' />
             </ButtonBase>
-         
           </Grid>
           <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={2}>
