@@ -147,55 +147,7 @@ export default function ComplexGrid() {
             </Grid>
           </Grid>
         </Grid>
-
-        <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-
-        <CardActions disableSpacing>
-        <IconButton
-              onClick={() => handleExpandClick(1)}
-              aria-expanded={expandedId === 1}
-              aria-label="show more"
-            >
-             Reviews <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-          <Collapse in={expandedId === 1} timeout="auto" unmountOnExit>
-            <CardContent>
-            {reviews.map((review) => {
-            return <Paper className={classes.paper2}>
-            <Grid container spacing={2}>
-            <Grid item>
-            <Avatar alt="Remy Sharp" src={imgLink} />
-            </Grid>
-            <Grid justifyContent="left" item>
-            <h4 style={{ margin: 0, textAlign: "left" }}>{review.author}</h4>
-            <p style={{ textAlign: "left" }}>
-              {review.description}
-            </p>
-            <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
-            <br></br>
-
-            </Grid>
-            <Grid justifyContent="left" right>
-          <IconButton aria-label="like" className={classes.margin} > 
-          <ThumbUpIcon /> </IconButton>
-          <IconButton aria-label="unlike" className={classes.margin}>
-          <ThumbDownIcon /> </IconButton>
-          </Grid>
-        </Grid>
-        <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-      </Paper>
-            })}
-
-       <Paper className={classes.paper2}>
-            <form>
-          <TextField multiline fullWidth rows={4}  id="outlined-basic" label="Leave review..." variant="outlined" />
-          
-          </form>
-      </Paper>
-            </CardContent>
-          </Collapse>
-      </Paper>
+        </Paper>
     })}
     </div>
   );

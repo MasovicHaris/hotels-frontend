@@ -15,6 +15,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import TextField from '@material-ui/core/TextField';
 import Rating from '@material-ui/lab/Rating';
+import jwtDecode from 'jwt-decode';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,23 +61,27 @@ export default function Review() {
         dispatch(handleGetReviews("5e95d37ced6f16010b616dee"));
     }
 
-    const [name, setName] = useState("");
+    const [description, setDescription] = useState(" ");
     const [value, setValue] = useState(0);
   
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        let desc = `${name}`
+        let desc = `${description}`
         dispatch(handlePostReview("amir1", value, desc, currentHotel._id));
         dispatch(handleGetReviews("5e95d37ced6f16010b616dee"));
     }
 
-  console.log("u", reviews)
+  console.log("u", user.token)
   console.log("current", currentHotel)
+
+  const { id, name } = jwtDecode(user.token);
+  console.log("2",name);
+  console.log("3",reviews);
 
   return (
     <div className={classes.root}>
       <h1>Reviews for hotel </h1>
-      {reviews.map((review) => {
+      {reviews && reviews.map((review) => {
       return <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item>
@@ -108,8 +113,8 @@ export default function Review() {
           onChange={(event, newValue) => {
             setValue(newValue);
           }} />
-          <TextField multiline fullWidth rows={4}  id="outlined-basic" label="Leave review..." variant="outlined" value={name}
-          onChange={e => setName(e.target.value)}/>    
+          <TextField multiline fullWidth rows={4}  id="outlined-basic" label="Leave review..." variant="outlined" value={description}
+          onChange={e => setDescription(e.target.value)}/>    
           <Button type="submit" value="Submit" className={classes.button} variant="contained" color="primary"  >Submit </Button>
       </form>
       </Paper>
