@@ -1,9 +1,20 @@
 import cacheHelper from '../../../core/helpers/cookies-helper';
+import jwtDecode from 'jwt-decode';
 
 import { AUTH_ACTIONS } from '../constants/auth-constants';
 
 const getAuthInitialState = () => {
-  const token = cacheHelper.getCookie('token');
+  let token = cacheHelper.getCookie('token');
+  let data;
+  if (token) {
+    try {
+      data = jwtDecode(token);
+    }
+    catch(err) {
+      token = null;
+    }
+  }
+
 
   return {
     userLoggedIn: token ? true : false,
@@ -11,8 +22,8 @@ const getAuthInitialState = () => {
     signupInProgress: false,
     token,
     user: {
-      id: null,
-      type: null,
+      id: data && data.id ? data.id : null,
+      type: data && data.type ? data.type : null,
     },
   };
 };
