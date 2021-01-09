@@ -1,29 +1,28 @@
-import cacheHelper from '../../../core/helpers/cookies-helper';
-
 import { ADMIN_ACTIONS } from '../constants/admin-page-constants';
 
 const getAdminInitialState = () => {
-    const token = cacheHelper.getCookie('token');
-  
     return {
-      userLoggedIn: token ? true : false,
       createInProgress: false,
-      token,
-      user: {
-        id: null,
-        type: null,
-      },
+      editInProgress: false,
     };
   };
 
 
 export const admin = (state = getAdminInitialState(), action) => {
-    console.log(action);
     switch (action.type) {
         case ADMIN_ACTIONS.HANDLE_CREATE_HOTEL_IN_PROGRESS:
             return {...state, createInProgress: action.status};
         case ADMIN_ACTIONS.HANDLE_CREATE_HOTEL_SUCCESS:
-            console.log(action.data)
+            // console.log(action.data)
+            return state;
+        case ADMIN_ACTIONS.HANDLE_DELETE_HOTEL_IN_PROGRESS:
+            return {...state, createInProgress: action.status};
+        case ADMIN_ACTIONS.HANDLE_DELETE_HOTEL_SUCCESS:
+            return state;
+        case ADMIN_ACTIONS.HANDLE_EDIT_HOTEL_IN_PROGRESS:
+            return {...state, editInProgress: action.status};
+        case ADMIN_ACTIONS.HANDLE_EDIT_HOTEL_SUCCESS:
+            return state;
         default:
             return state;
     }

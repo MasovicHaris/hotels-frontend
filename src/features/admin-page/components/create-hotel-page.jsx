@@ -8,10 +8,13 @@ import Grid from '@material-ui/core/Grid';
 import MaterialContainer from '@material-ui/core/Container';
 import styled from 'styled-components';
 import * as Yup from 'yup';
+import NotFound from '../../../core/routing/not-found';
 
-import { handleCreateHotel } from '../actions/admin-page-actions';
+import { handleCreateHotel, handleEditHotel } from '../actions/admin-page-actions';
 
 import Button from '../../shared-components/button';
+import ApplicationHeader from '../../shared-components/header';
+
 
 const Container = styled(MaterialContainer)`
   background-color: #fff;
@@ -36,10 +39,11 @@ const useStyles = makeStyles(theme => ({
 function CreateHotelPage() {
     const dispatch = useDispatch();
     const classes = useStyles();
-    const history = useHistory();
 
-    const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
+    const userIsAdmin = useSelector(state => state.auth.user.type === 'Admin');
     const loginInProgress = useSelector(state => state.auth.loginInProgress);
+    const hotel = useSelector(state => state.hotels.currentHotel);
+    const isEdit = useSelector(state => state.hotels.currentHotel._id != null);
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Name is required.'),
@@ -48,14 +52,18 @@ function CreateHotelPage() {
     });
 
     const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
-        initialValues: {
-          name: '',
-          address: '',
-          description: ''
+      enableReinitialize: true,  
+      initialValues: {
+          name: hotel && hotel.name ? hotel.name : '',
+          address: hotel && hotel.address ? hotel.address : '',
+          description: hotel && hotel.description ? hotel.description :''
         },
         validationSchema,
         onSubmit: ({ name, address, description }) => {
-          dispatch(handleCreateHotel(name, address, description));
+          if (isEdit) {
+            dispatch(handleEditHotel(name, address, description, hotel._id));
+          }
+          else dispatch(handleCreateHotel(name, address, description));
         },
     });
 
@@ -65,57 +73,61 @@ function CreateHotelPage() {
 
     return(
         <Fragment>
-            <Container component="main">
-                <div className={classes.paper}>
-                    <form className={classes.form} onSubmit={handleSubmit} noValidate>
-                        <h1>Create hotel</h1>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                value={values.name}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                label={'Name'}
-                                error={Boolean(nameError)}
-                                helperText={nameError}
-                                variant="outlined"
-                                name="name"
-                                fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                value={values.address}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                error={Boolean(addressError)}
-                                helperText={addressError}
-                                name="address"
-                                label={'Address'}
-                                variant="outlined"
-                                fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                value={values.description}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                error={Boolean(descriptionError)}
-                                helperText={descriptionError}
-                                name="description"
-                                label={'Description'}
-                                variant="outlined"
-                                fullWidth
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={loginInProgress} className={classes.submit}>
-                            {'Create hotel'}
-                        </Button>
-                    </form>
-                </div>
-            </Container>
+           <ApplicationHeader/>
+           {userIsAdmin ? 
+              <Container component="main">
+              <div className={classes.paper}>
+                  <form className={classes.form} onSubmit={handleSubmit} noValidate>
+                      {isEdit ? <h1>Edit hotel</h1> : <h1>Create hotel</h1>}
+                      <Grid container spacing={2}>
+                          <Grid item xs={12}>
+                              <TextField
+                              value={values.name}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              label={'Name'}
+                              error={Boolean(nameError)}
+                              helperText={nameError}
+                              variant="outlined"
+                              name="name"
+                              fullWidth
+                              />
+                          </Grid>
+                          <Grid item xs={12}>
+                              <TextField
+                              value={values.address}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={Boolean(addressError)}
+                              helperText={addressError}
+                              name="address"
+                              label={'Address'}
+                              variant="outlined"
+                              fullWidth
+                              />
+                          </Grid>
+                          <Grid item xs={12}>
+                              <TextField
+                              value={values.description}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={Boolean(descriptionError)}
+                              helperText={descriptionError}
+                              name="description"
+                              label={'Description'}
+                              variant="outlined"
+                              multiline
+                              fullWidth
+                              />
+                          </Grid>
+                      </Grid>
+                      <Button type="submit" fullWidth variant="contained" color="primary" loadingInProgress={loginInProgress} className={classes.submit}>
+                          {isEdit ? 'Edit hotel' : 'Create hotel'}
+                      </Button>
+                  </form>
+              </div>
+          </Container>
+          : <NotFound />}
         </Fragment>
     )
 }
