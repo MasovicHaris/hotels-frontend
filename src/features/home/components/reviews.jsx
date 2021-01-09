@@ -16,6 +16,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import TextField from '@material-ui/core/TextField';
 import Rating from '@material-ui/lab/Rating';
 import jwtDecode from 'jwt-decode';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 import ApplicationHeader from '../../shared-components/header';
 
@@ -30,9 +31,15 @@ const useStyles = makeStyles((theme) => ({
       margin: 'auto',
       width: 800,
     },
+    paper2: {
+      padding: theme.spacing(2),
+      margin: 'auto',
+      marginTop: "30px",
+      width: 1000,
+    },
     image: {
-      width: 300,
-      height: 300,
+      width: 200,
+      height: 200,
     },
     img: {
       margin: 'auto',
@@ -43,7 +50,12 @@ const useStyles = makeStyles((theme) => ({
     button: {
       margin: "10px",
       marginLeft: "660px"
-    }
+    },
+    h2: {
+      textAlign: 'center',
+      margin: '20px auto',
+      display: 'block'
+  }
   }));
 
 
@@ -83,7 +95,43 @@ export default function Review() {
   return (
     <div className={classes.root}>
     <ApplicationHeader/>  
-      <h1>Reviews for hotel {currentHotel.name}</h1>
+
+    <Paper className={classes.paper2}>
+    <Grid container spacing={2}  >
+          <Grid item>
+            <ButtonBase className={classes.image}>
+              <img className={classes.img} alt="complex" src='../../../../hotel-logo.jpg' />
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={12} sm container>
+            <Grid item xs container direction="column" spacing={1}>
+              <Grid item xs>
+                <Typography  variant="h1"> 
+                
+                </Typography>
+                <Typography gutterBottom variant="h4">
+                  {currentHotel.name} 
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  {currentHotel.address}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {currentHotel.description}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" >
+                  Rating <Rating name="half-rating-read" defaultValue={currentHotel.rate} precision={0.5} readOnly />
+                </Typography>
+
+              </Grid>
+              </Grid>
+          </Grid>
+      </Grid>
+      </Paper>
+      <Typography gutterBottom variant="h6" className={classes.h2}>
+                  Recent reviews for hotel {currentHotel.name}
+      </Typography>
       {reviews && reviews.map((review) => {
       return <Paper className={classes.paper}>
         <Grid container spacing={2}>
