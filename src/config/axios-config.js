@@ -23,7 +23,7 @@ instance.interceptors.request.use(
     const state = store.getState();
     const token = state && state.auth && state.auth.token;
     if (token) {
-      config.headers['authorization'] = `Bearer ${token}`;
+      config.headers['authorization'] = `${token}`;
     }
     return config;
   },
