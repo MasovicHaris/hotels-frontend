@@ -43,7 +43,9 @@ function CreateHotelPage() {
     const userIsAdmin = useSelector(state => state.auth.user.type === 'Admin');
     const loginInProgress = useSelector(state => state.auth.loginInProgress);
     const hotel = useSelector(state => state.hotels.currentHotel);
-    const isEdit = useSelector(state => state.hotels.currentHotel._id != null);
+    const isEdit = useSelector(state => state.admin.isEdit);
+
+    const history = useHistory();
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Name is required.'),
@@ -54,9 +56,9 @@ function CreateHotelPage() {
     const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
       enableReinitialize: true,  
       initialValues: {
-          name: hotel && hotel.name ? hotel.name : '',
-          address: hotel && hotel.address ? hotel.address : '',
-          description: hotel && hotel.description ? hotel.description :''
+          name: isEdit && hotel && hotel.name ? hotel.name : '',
+          address: isEdit && hotel && hotel.address ? hotel.address : '',
+          description: isEdit && hotel && hotel.description ? hotel.description :''
         },
         validationSchema,
         onSubmit: ({ name, address, description }) => {
@@ -64,6 +66,7 @@ function CreateHotelPage() {
             dispatch(handleEditHotel(name, address, description, hotel._id));
           }
           else dispatch(handleCreateHotel(name, address, description));
+          history.push('/home');
         },
     });
 

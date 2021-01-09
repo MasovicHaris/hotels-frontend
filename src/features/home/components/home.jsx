@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { handleGetHotels, handleGetReviews, handleGetHotel } from '../actions/home-actions';
-import { handleDeleteHotel } from '../../admin-page/actions/admin-page-actions';
+import { handleDeleteHotel, handleEditClicked } from '../../admin-page/actions/admin-page-actions';
 import Rating from '@material-ui/lab/Rating';
 import Link from '@material-ui/core/Link';
 
@@ -97,7 +97,8 @@ export default function ComplexGrid() {
 
   const handleEditHotel = (id) => {
     dispatch(handleGetHotel(id));
-    history.push('/new-hotel');
+    dispatch(handleEditClicked());
+    history.push('/hotel');
   }
  
   return (

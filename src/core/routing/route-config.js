@@ -20,7 +20,7 @@ const routes = [
     requireAuth: false,
   },
   {
-    path: '/new-hotel',
+    path: '/hotel',
     component: CreateHotelPage,
     exact: true,
     requireAuth: true,
