@@ -17,6 +17,8 @@ import TextField from '@material-ui/core/TextField';
 import Rating from '@material-ui/lab/Rating';
 import jwtDecode from 'jwt-decode';
 
+import ApplicationHeader from '../../shared-components/header';
+
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -80,7 +82,8 @@ export default function Review() {
 
   return (
     <div className={classes.root}>
-      <h1>Reviews for hotel </h1>
+    <ApplicationHeader/>  
+      <h1>Reviews for hotel {currentHotel.name}</h1>
       {reviews && reviews.map((review) => {
       return <Paper className={classes.paper}>
         <Grid container spacing={2}>
