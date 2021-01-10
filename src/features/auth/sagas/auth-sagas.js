@@ -26,7 +26,6 @@ function* requestLogin({ email, password, history }) {
     yield put(handleLoginSuccess({ user: { type, id }, token }));
 
     history.push('/');
-    yield put(handleShowMessage('Email sent for confirmation.', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
   } catch (err) {
     yield put(handleShowMessage('Error logging in.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
   } finally {
@@ -47,6 +46,8 @@ function* requestSignup({ data, history }) {
     yield call(AuthApi.requestSignup, dataToSend);
 
     yield put(handleShowMessage('Successfully created an account.', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
+
+    yield put(handleShowMessage('Email sent for confirmation.', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
     history.push('/login');
   } catch (err) {
     yield put(handleShowMessage('Error creating account.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
