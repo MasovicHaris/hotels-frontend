@@ -43,19 +43,22 @@ export const hotels = (state = getHotelsInitialState(), action) => {
     case HOME_ACTIONS.HANDLE_GET_HOTEL_SUCCESS:
       return { ...state, hotels: action.data };
     case HOME_ACTIONS.HANDLE_GET_HOTEL:
-      console.log("get", action)
+      return getHotelsInitialState();
 
     case HOME_ACTIONS.HANDLE_GET_REVIEWS_IN_PROGRESS:
       return { ...state, reviewsInProgress: action.status };
     case HOME_ACTIONS.HANDLE_GET_REVIEWS_SUCCESS:
       return { ...state, reviews: action.data };
 
+    case HOME_ACTIONS.HANDLE_GET_REVIEWS:
+      return getHotelsInitialState();
+
     case HOME_ACTIONS.HANDLE_GET_HOTEL1_IN_PROGRESS:
       return { ...state, currentHotelInProgress: action.status };
     case HOME_ACTIONS.HANDLE_GET_HOTEL1_SUCCESS:
       return { ...state, currentHotel: action.data };
     case HOME_ACTIONS.HANDLE_GET_HOTEL1:
-      console.log("get", action)
+      return getHotelsInitialState();
 
     default:
       return state;

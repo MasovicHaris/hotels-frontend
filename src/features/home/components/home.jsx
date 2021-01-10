@@ -23,6 +23,9 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ApplicationHeader from '../../shared-components/header';
 import Button from '@material-ui/core/Button';
+import { isJwtExpired } from 'jwt-check-expiration';
+
+import { handleLogout } from '../../auth/actions/auth-actions';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -71,6 +74,8 @@ export default function ComplexGrid() {
   const userIsAdmin = useSelector(state => state.auth.user.type === 'Admin');
 
   const imgLink = '../../../../user-logo.png'
+  const user = useSelector(state => state.auth);
+
   const dispatch = useDispatch();
 
   useEffect(() => { dispatch(handleGetHotels([], [
@@ -82,12 +87,7 @@ export default function ComplexGrid() {
   }, history));
   }, [dispatch]);
 
-  const [expandedId, setExpandedId] = React.useState(-1);
 
-
-  const handleExpandClick = i => {
-    setExpandedId(expandedId === i ? -1 : i);
-  };
 
   const handleOnClick = id => {
     dispatch(handleGetReviews(id));
@@ -100,6 +100,13 @@ export default function ComplexGrid() {
     dispatch(handleEditClicked());
     history.push('/hotel');
   }
+
+  const isTokenValid = isJwtExpired(user.token);
+  if(isTokenValid) {    
+    dispatch(handleLogout());
+    history.push('/login');
+  }
+ 
  
   return (
     
@@ -161,55 +168,7 @@ export default function ComplexGrid() {
             </Grid>
           </Grid>
         </Grid>
-
-        <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-
-        <CardActions disableSpacing>
-        <IconButton
-              onClick={() => handleExpandClick(1)}
-              aria-expanded={expandedId === 1}
-              aria-label="show more"
-            >
-             Reviews <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-          <Collapse in={expandedId === 1} timeout="auto" unmountOnExit>
-            <CardContent>
-            {reviews.map((review) => {
-            return <Paper className={classes.paper2}>
-            <Grid container spacing={2}>
-            <Grid item>
-            <Avatar alt="Remy Sharp" src={imgLink} />
-            </Grid>
-            <Grid justifyContent="left" item>
-            <h4 style={{ margin: 0, textAlign: "left" }}>{review.author}</h4>
-            <p style={{ textAlign: "left" }}>
-              {review.description}
-            </p>
-            <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
-            <br></br>
-
-            </Grid>
-            <Grid justifyContent="left" right>
-          <IconButton aria-label="like" className={classes.margin} > 
-          <ThumbUpIcon /> </IconButton>
-          <IconButton aria-label="unlike" className={classes.margin}>
-          <ThumbDownIcon /> </IconButton>
-          </Grid>
-        </Grid>
-        <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-      </Paper>
-            })}
-
-       <Paper className={classes.paper2}>
-            <form>
-          <TextField multiline fullWidth rows={4}  id="outlined-basic" label="Leave review..." variant="outlined" />
-          
-          </form>
-      </Paper>
-            </CardContent>
-          </Collapse>
-      </Paper>
+        </Paper>
     })}
     </div>
   );
