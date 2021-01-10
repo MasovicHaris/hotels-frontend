@@ -37,6 +37,7 @@ function* requestGetReviews({data}) {
   try {
     yield put(handleGetReviewsInProgress(true));
     const res = yield call(HomeApi.requestGetReviews, data);
+    console.log(res);
     yield put(handleGetReviewsSuccess(res.data));
   } catch (err) {
     console.log(err);
@@ -59,7 +60,11 @@ function* requestPostReview({author, rating, description, hotelID }) {
 
     const res = yield call(HomeApi.requestPostReview, dataToSend);
     yield put(handleGetReviewsSuccess(res.data));
-
+    yield put(handleShowMessage('Successfully created a review.', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
+    
+    if(description=="" || description==null) {
+    yield put(handleShowMessage('Review is not allowed to be empty.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+    }
   } catch (err) {
     console.log(err);
     yield put(handleShowMessage('Error posting review.', SNACKBAR_SEVERITY_VARIANTS.ERROR));

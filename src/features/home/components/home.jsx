@@ -23,6 +23,9 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ApplicationHeader from '../../shared-components/header';
 import Button from '@material-ui/core/Button';
+import { isJwtExpired } from 'jwt-check-expiration';
+
+import { handleLogout } from '../../auth/actions/auth-actions';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -71,6 +74,8 @@ export default function ComplexGrid() {
   const userIsAdmin = useSelector(state => state.auth.user.type === 'Admin');
 
   const imgLink = '../../../../user-logo.png'
+  const user = useSelector(state => state.auth);
+
   const dispatch = useDispatch();
 
   useEffect(() => { dispatch(handleGetHotels([], [
@@ -82,12 +87,7 @@ export default function ComplexGrid() {
   }, history));
   }, [dispatch]);
 
-  const [expandedId, setExpandedId] = React.useState(-1);
 
-
-  const handleExpandClick = i => {
-    setExpandedId(expandedId === i ? -1 : i);
-  };
 
   const handleOnClick = id => {
     dispatch(handleGetReviews(id));
@@ -99,6 +99,13 @@ export default function ComplexGrid() {
     dispatch(handleGetHotel(id));
     history.push('/new-hotel');
   }
+
+  const isTokenValid = isJwtExpired(user.token);
+  if(isTokenValid) {    
+    dispatch(handleLogout());
+    history.push('/login');
+  }
+ 
  
   return (
     

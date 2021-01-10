@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import propTypes from 'prop-types';
+import { isJwtExpired } from 'jwt-check-expiration';
+
 
 import { handleLogout } from '../auth/actions/auth-actions';
 
@@ -64,6 +66,7 @@ function ApplicationHeader({ isCreateHotel }) {
 
   const userLoggedIn = useSelector(state => state.auth.userLoggedIn);
   const userIsAdmin = useSelector(state => state.auth.user.type === 'Admin');
+  const user = useSelector(state => state.auth.user);
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -91,6 +94,8 @@ function ApplicationHeader({ isCreateHotel }) {
     history.push('/new-hotel');
   };
 
+
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -112,7 +117,7 @@ function ApplicationHeader({ isCreateHotel }) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
-            <Typography className={classes.title} variant="h6" noWrap>
+            <Typography className={classes.title} variant="h6" style={{ cursor: 'pointer' }} onClick={handleHotelsClicked}>
               Hotels
             </Typography>
           {userLoggedIn ? (

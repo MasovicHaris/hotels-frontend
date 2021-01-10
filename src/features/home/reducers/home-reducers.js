@@ -50,6 +50,9 @@ export const hotels = (state = getHotelsInitialState(), action) => {
     case HOME_ACTIONS.HANDLE_GET_REVIEWS_SUCCESS:
       return { ...state, reviews: action.data };
 
+    case HOME_ACTIONS.HANDLE_GET_REVIEWS:
+      return getHotelsInitialState();
+
     case HOME_ACTIONS.HANDLE_GET_HOTEL1_IN_PROGRESS:
       return { ...state, currentHotelInProgress: action.status };
     case HOME_ACTIONS.HANDLE_GET_HOTEL1_SUCCESS:

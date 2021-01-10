@@ -17,6 +17,10 @@ import TextField from '@material-ui/core/TextField';
 import Rating from '@material-ui/lab/Rating';
 import jwtDecode from 'jwt-decode';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import * as Yup from 'yup';
+import { isJwtExpired } from 'jwt-check-expiration';
+
+import { handleLogout } from '../../auth/actions/auth-actions';
 
 import ApplicationHeader from '../../shared-components/header';
 
@@ -69,29 +73,24 @@ export default function Review() {
     const currentHotel = useSelector(state => state.hotels.currentHotel);
     const history = useHistory();
     const dispatch = useDispatch();
-
-    const handleOnClick = () => {
-        dispatch(handlePostReview("amir1", 3, "other description", "5e95d37ced6f16010b616dee"));
-        dispatch(handleGetReviews("5e95d37ced6f16010b616dee"));
-    }
-
-    const [description, setDescription] = useState(" ");
+    const [description, setDescription] = useState("");
     const [value, setValue] = useState(0);
-  
+
+    const { name } = jwtDecode(user.token);
+
     const handleSubmit = (evt) => {
         evt.preventDefault();
         let desc = `${description}`
-        dispatch(handlePostReview("amir1", value, desc, currentHotel._id));
-        dispatch(handleGetReviews("5e95d37ced6f16010b616dee"));
+        dispatch(handlePostReview(name, value, desc, currentHotel._id));
+        dispatch(handleGetReviews(currentHotel._id));
+        history.push('/home');
     }
 
-  console.log("u", user.token)
-  console.log("current", currentHotel)
-
-  const { id, name } = jwtDecode(user.token);
-  console.log("2",name);
-  console.log("3",reviews);
-
+    const isTokenValid = isJwtExpired(user.token);
+    if(isTokenValid) {    
+    dispatch(handleLogout());
+    history.push('/login');
+    }
   return (
     <div className={classes.root}>
     <ApplicationHeader/>  
@@ -132,21 +131,25 @@ export default function Review() {
       <Typography gutterBottom variant="h6" className={classes.h2}>
                   Recent reviews for hotel {currentHotel.name}
       </Typography>
-      {reviews && reviews.map((review) => {
+      {reviews && reviews.slice(0).reverse().map((review) => {
       return <Paper className={classes.paper}>
-        <Grid container spacing={2}>
-          <Grid item>
+        <Grid container direction="column" spacing={2}>
+        <Grid container direction="row">
+          <Grid item >
             <Avatar alt="Remy Sharp" src={imgLink} />
           </Grid>
-          <Grid justifyContent="left" item>
-            <h4 style={{ margin: 0, textAlign: "left" }}>{review.author}</h4>
+          <Grid item>
+          <h4 style={{ margin: "10px", textAlign: "left" }}>{review.author}</h4>
+          </Grid>
+          </Grid>
+          <Grid justifyContent="left" item style={{ margin: "10px"}}>
             <p style={{ textAlign: "left" }}>
             {review.description}
             
             </p>
-            <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
+            <Rating name="half-rating-read" defaultValue={review && review.rating} readOnly />
             <br></br>
-            <IconButton aria-label="like" className={classes.margin} onClick={handleOnClick}>
+            <IconButton aria-label="like" className={classes.margin} >
               
           <ThumbUpIcon /> </IconButton>
           <IconButton aria-label="unlike" className={classes.margin}>
@@ -164,7 +167,7 @@ export default function Review() {
           onChange={(event, newValue) => {
             setValue(newValue);
           }} />
-          <TextField multiline fullWidth rows={4}  id="outlined-basic" label="Leave review..." variant="outlined" value={description}
+          <TextField multiline fullWidth rows={4}  id="outlined-basic" label="Leave a review..." variant="outlined" value={description}
           onChange={e => setDescription(e.target.value)}/>    
           <Button type="submit" value="Submit" className={classes.button} variant="contained" color="primary"  >Submit </Button>
       </form>
