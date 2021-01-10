@@ -7,5 +7,6 @@ export const ADMIN_ACTIONS = {
     HANDLE_DELETE_HOTEL_SUCCESS: 'adminDeleteHotelSuccess',
     HANDLE_EDIT_HOTEL: 'adminEditHotel',
     HANDLE_EDIT_HOTEL_IN_PROGRESS: 'adminEditHotelInProgress',
-    HANDLE_EDIT_HOTEL_SUCCESS: 'adminEditHotelSuccess'
+    HANDLE_EDIT_HOTEL_SUCCESS: 'adminEditHotelSuccess',
+    HANDLE_EDIT_CLICKED: 'adminHandleEditClicked'
 };

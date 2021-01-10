@@ -91,7 +91,7 @@ function ApplicationHeader({ isCreateHotel }) {
 
   const handleCreateHotelClicked = () => {
     setAnchorEl(null);
-    history.push('/new-hotel');
+    history.push('/hotel');
   };
 
 

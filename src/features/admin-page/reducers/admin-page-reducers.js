@@ -4,6 +4,7 @@ const getAdminInitialState = () => {
     return {
       createInProgress: false,
       editInProgress: false,
+      isEdit: false
     };
   };
 
@@ -21,7 +22,9 @@ export const admin = (state = getAdminInitialState(), action) => {
         case ADMIN_ACTIONS.HANDLE_EDIT_HOTEL_IN_PROGRESS:
             return {...state, editInProgress: action.status};
         case ADMIN_ACTIONS.HANDLE_EDIT_HOTEL_SUCCESS:
-            return state;
+            return {...state, isEdit: false}
+        case ADMIN_ACTIONS.HANDLE_EDIT_CLICKED:
+            return{...state, isEdit: true}
         default:
             return state;
     }

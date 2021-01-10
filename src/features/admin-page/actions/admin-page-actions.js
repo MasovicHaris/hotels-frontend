@@ -49,3 +49,7 @@ export const handleDeleteHotelSuccess = id => ({
     type: ADMIN_ACTIONS.HANDLE_DELETE_HOTEL_SUCCESS,
     id
 });
+
+export const handleEditClicked = () => ({
+    type: ADMIN_ACTIONS.HANDLE_EDIT_CLICKED
+})
