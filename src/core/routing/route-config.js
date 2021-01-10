@@ -29,12 +29,19 @@ const routes = [
     path: '/home',
     component: Home,
     exact: true,
-    requireAuth: false,
+    requireAuth: true,
   },
 
   {
     path: '/review',
     component: Review,
+    exact: true,
+    requireAuth: true,
+  },
+
+  {
+    path: '/',
+    component: Login,
     exact: true,
     requireAuth: false,
   },
