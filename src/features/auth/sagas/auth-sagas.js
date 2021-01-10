@@ -24,7 +24,7 @@ function* requestLogin({ email, password, history }) {
     cookiesHelper.setCookie('token', token);
 
     yield put(handleLoginSuccess({ user: { type, id }, token }));
-    history.push('/');
+    history.push('/home');
   } catch (err) {
     console.log(err);
     yield put(handleShowMessage('Error logging in.', SNACKBAR_SEVERITY_VARIANTS.ERROR));

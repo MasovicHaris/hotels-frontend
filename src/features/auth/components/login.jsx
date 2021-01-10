@@ -63,7 +63,7 @@ function Login() {
   const passwordError = touched.password && errors.password;
 
   if (userLoggedIn) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home" />;
   }
 
   return (
