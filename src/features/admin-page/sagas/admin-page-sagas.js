@@ -33,7 +33,6 @@ function* requestDeleteHotel({id}) {
         yield put(handleDeleteHotelInProgress(true));
 
         const { data } = yield call(AdminApi.requestDeleteHotel, id);
-        console.log(data);
         yield put(handleShowMessage('Successfully deleted hotel.', SNACKBAR_SEVERITY_VARIANTS.SUCCESS));
         yield put(handleDeleteHotelSuccess(data));
     }

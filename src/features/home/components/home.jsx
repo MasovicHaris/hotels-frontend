@@ -89,10 +89,10 @@ export default function ComplexGrid() {
 
 
 
-  const handleOnClick = id => {
-    dispatch(handleGetReviews(id));
-    dispatch(handleGetHotel(id));
-    history.push('/review');
+  const handleOnClick = async (id) => {
+    await dispatch(handleGetReviews(id));
+    await dispatch(handleGetHotel(id));
+    history.push('/review/'+id);
   }
 
   const handleEditHotel = (id) => {
@@ -145,7 +145,7 @@ export default function ComplexGrid() {
               </Grid>
               <Grid item>
                 <Typography variant="body1" >
-                  Rating <Rating name="half-rating-read" defaultValue={data.rate} precision={0.5} readOnly />
+                  Rating <Rating name="half-rating-read" value={(data.rating+1)*5/2} precision={0.1} readOnly />
                 </Typography>
 
               </Grid>

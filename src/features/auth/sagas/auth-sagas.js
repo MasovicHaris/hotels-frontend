@@ -26,7 +26,6 @@ function* requestLogin({ email, password, history }) {
     yield put(handleLoginSuccess({ user: { type, id }, token }));
     history.push('/');
   } catch (err) {
-    console.log(err);
     yield put(handleShowMessage('Error logging in.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
   } finally {
     yield put(handleLoginInProgress(false));

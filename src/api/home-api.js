@@ -30,9 +30,25 @@ const requestGetHotel = hotelId => {
   });
 };
 
+const requestLikeReview = revlId => {
+  return axios({
+    method: 'POST',
+    url: `/review/${revlId}/like`
+  });
+};
+
+const requestDislikeReview = revlId => {
+  return axios({
+    method: 'POST',
+    url: `/review/${revlId}/dislike`
+  });
+};
+
 export default {
   requestGetHotels,
   requestGetReviews,
   requestPostReview,
-  requestGetHotel
+  requestGetHotel,
+  requestLikeReview,
+  requestDislikeReview,
 };

@@ -13,7 +13,6 @@ export const admin = (state = getAdminInitialState(), action) => {
         case ADMIN_ACTIONS.HANDLE_CREATE_HOTEL_IN_PROGRESS:
             return {...state, createInProgress: action.status};
         case ADMIN_ACTIONS.HANDLE_CREATE_HOTEL_SUCCESS:
-            // console.log(action.data)
             return state;
         case ADMIN_ACTIONS.HANDLE_DELETE_HOTEL_IN_PROGRESS:
             return {...state, createInProgress: action.status};

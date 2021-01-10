@@ -26,7 +26,6 @@ function* requestGetHotels({ query, sort, paging, history }) {
     yield put(handleGetHotelsSuccess(res.data));
     history.push('/home');
   } catch (err) {
-    console.log(err);
     yield put(handleShowMessage('Error getting hotels.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
   } finally {
     //yield put(handleGetHotelsInProgress(false));
@@ -37,10 +36,8 @@ function* requestGetReviews({data}) {
   try {
     yield put(handleGetReviewsInProgress(true));
     const res = yield call(HomeApi.requestGetReviews, data);
-    console.log(res);
     yield put(handleGetReviewsSuccess(res.data));
   } catch (err) {
-    console.log(err);
     yield put(handleShowMessage('Error getting reviews.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
   } finally {
     //yield put(handleGetReviewsInProgress(false));
@@ -66,7 +63,6 @@ function* requestPostReview({author, rating, description, hotelID }) {
     yield put(handleShowMessage('Review is not allowed to be empty.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
     }
   } catch (err) {
-    console.log(err);
     yield put(handleShowMessage('Error posting review.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
   } finally {
     //yield put(handleGetReviewsInProgress(false));
@@ -79,8 +75,27 @@ function* requestGetCurrentHotel({data}) {
     const res = yield call(HomeApi.requestGetHotel, data);
     yield put(handleGetHotelSuccess(res.data));
   } catch (err) {
-    console.log(err);
     yield put(handleShowMessage('Error getting hotel.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    //yield put(handleGetReviewsInProgress(false));
+  }
+}
+
+function* requestLikeReview({data}) {
+  try {
+    const res = yield call(HomeApi.requestLikeReview, data);
+  } catch (err) {
+    yield put(handleShowMessage('Error likeing review.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
+  } finally {
+    //yield put(handleGetReviewsInProgress(false));
+  }
+}
+
+function* requestdislikeReview({data}) {
+  try {
+    const res = yield call(HomeApi.requestDislikeReview, data);
+  } catch (err) {
+    yield put(handleShowMessage('Error likeing review.', SNACKBAR_SEVERITY_VARIANTS.ERROR));
   } finally {
     //yield put(handleGetReviewsInProgress(false));
   }
@@ -91,4 +106,6 @@ export default function* saga() {
   yield takeLatest(HOME_ACTIONS.HANDLE_GET_REVIEWS, requestGetReviews);
   yield takeLatest(HOME_ACTIONS.HANDLE_POST_REVIEW, requestPostReview);
   yield takeLatest(HOME_ACTIONS.HANDLE_GET_HOTEL1, requestGetCurrentHotel);
+  yield takeLatest(HOME_ACTIONS.HANDLE_LIKE_REVIEW, requestLikeReview);
+  yield takeLatest(HOME_ACTIONS.HANDLE_DISLIKE_REVIEW, requestdislikeReview);
 }

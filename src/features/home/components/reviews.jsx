@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Typography from '@material-ui/core/Typography';
 import { Divider, Avatar, Grid, Paper, Button } from "@material-ui/core";
-import { handlePostReview, handleGetReviews } from '../actions/home-actions';
+import { handlePostReview, handleGetReviews, handleLikeReview, handleDislikeReview, handleGetHotel } from '../actions/home-actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,6 +23,7 @@ import { isJwtExpired } from 'jwt-check-expiration';
 import { handleLogout } from '../../auth/actions/auth-actions';
 
 import ApplicationHeader from '../../shared-components/header';
+import HomeApi from '../../../api/home-api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -91,6 +92,21 @@ export default function Review() {
       dispatch(handleLogout());
       history.push('/login');
     }
+
+const onLike = async (reviewId) => {
+  let id = window.location.pathname.substr(8);
+  await dispatch(handleLikeReview(reviewId));
+  await dispatch(handleGetReviews(id));
+  await dispatch(handleGetHotel(id));
+}
+
+const onDislike = async (reviewId) => {
+  let id = window.location.pathname.substr(8);
+  await dispatch(handleDislikeReview(reviewId));
+  await dispatch(handleGetReviews(id));
+  await dispatch(handleGetHotel(id));
+}
+
   return (
     <div className={classes.root}>
     <ApplicationHeader/>  
@@ -120,7 +136,8 @@ export default function Review() {
               </Grid>
               <Grid item>
                 <Typography variant="body1" >
-                  Rating <Rating name="half-rating-read" defaultValue={currentHotel.rate} precision={0.5} readOnly />
+                  Rating <Rating name="half-rating-read" alue={(currentHotel.rating+1)*5/2} precision={0.1} precision={0.1} readOnly />
+
                 </Typography>
 
               </Grid>
@@ -132,6 +149,8 @@ export default function Review() {
                   Recent reviews for hotel {currentHotel.name}
       </Typography>
       {reviews && reviews.slice(0).reverse().map((review) => {
+        const likes = (String(review.likes)=="")? 0 : (String(review.likes).split(",")).length
+        const dislikes = (String(review.dislikes)=="")? 0 : (String(review.dislikes).split(",")).length
       return <Paper className={classes.paper}>
         <Grid container direction="column" spacing={2}>
         <Grid container direction="row">
@@ -147,12 +166,13 @@ export default function Review() {
             {review.description}
             
             </p>
-            <Rating name="half-rating-read" defaultValue={review && review.rating} readOnly />
+            <Rating name="half-rating-read" defaultValue={review.rating} readOnly />
             <br></br>
-            <IconButton aria-label="like" className={classes.margin} >
-              
+            {likes}
+            <IconButton aria-label="like" className={classes.margin} onClick={()=> onLike(review._id)} >
           <ThumbUpIcon /> </IconButton>
-          <IconButton aria-label="unlike" className={classes.margin}>
+          {dislikes}
+          <IconButton aria-label="unlike" className={classes.margin} onClick={()=> onDislike(review._id)}>
           <ThumbDownIcon /> </IconButton>
           </Grid>
         </Grid>

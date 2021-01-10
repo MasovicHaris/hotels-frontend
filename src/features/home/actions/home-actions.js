@@ -54,3 +54,13 @@ export const handleGetHotelSuccess = data => ({
   type: HOME_ACTIONS.HANDLE_GET_HOTEL1_SUCCESS,
   data,
 });
+
+export const handleLikeReview = (data) => ({
+  type: HOME_ACTIONS.HANDLE_LIKE_REVIEW,
+  data
+});
+
+export const handleDislikeReview = (data) => ({
+  type: HOME_ACTIONS.HANDLE_DISLIKE_REVIEW,
+  data
+});

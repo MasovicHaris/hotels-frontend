@@ -33,7 +33,7 @@ const routes = [
   },
 
   {
-    path: '/review',
+    path: '/review/:hotelId',
     component: Review,
     exact: true,
     requireAuth: true,

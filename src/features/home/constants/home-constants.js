@@ -8,5 +8,7 @@ export const HOME_ACTIONS = {
   HANDLE_POST_REVIEW: 'postReview',
   HANDLE_GET_HOTEL1: 'getHotel',
   HANDLE_GET_HOTEL1_IN_PROGRESS: 'getHotelInProgress',
-  HANDLE_GET_HOTEL1_SUCCESS: 'getHotelSuccess'
+  HANDLE_GET_HOTEL1_SUCCESS: 'getHotelSuccess',
+  HANDLE_LIKE_REVIEW: 'likeReview',
+  HANDLE_DISLIKE_REVIEW: 'dislikeReview'
 };
