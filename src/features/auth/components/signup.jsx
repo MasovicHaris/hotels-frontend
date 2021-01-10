@@ -49,7 +49,13 @@ function SignUp() {
     email: Yup.string()
       .required('Email is required.')
       .min(5, 'Email should have at least 5 characters.'),
-    password: Yup.string().required('Password is required.'),
+      
+    password: Yup.string().required('Password is required.')
+    .min(8, 'Password should have at least 8 characters.')
+      .max(30, 'Password should have maximum 30 characters.')
+      .matches(
+       /[^\w\d]/,
+       'Password should have characters and numbers')
   });
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
