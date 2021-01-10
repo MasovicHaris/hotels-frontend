@@ -88,8 +88,8 @@ export default function Review() {
 
     const isTokenValid = isJwtExpired(user.token);
     if(isTokenValid) {    
-    dispatch(handleLogout());
-    history.push('/login');
+      dispatch(handleLogout());
+      history.push('/login');
     }
   return (
     <div className={classes.root}>
